@@ -61,8 +61,49 @@ curl -X POST http://127.0.0.1:8000/todos \
 { "id": 1, "title": "Buy milk", "completed": false }
 ```
 
-## 테스트
+### GET /todos/{id}
+
+단건 조회. 없으면 `404`.
 
 ```bash
-pytest
+curl http://127.0.0.1:8000/todos/1
 ```
+
+### PUT /todos/{id}
+
+전체 교체. 본문은 `POST /todos`와 동일한 스키마이며 모든 필드를 보내야 합니다. 없으면 `404`.
+
+```bash
+curl -X PUT http://127.0.0.1:8000/todos/1 \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Buy oat milk", "completed": true}'
+```
+
+### PATCH /todos/{id}
+
+부분 수정. 보낸 필드만 갱신합니다. 없으면 `404`.
+
+```bash
+curl -X PATCH http://127.0.0.1:8000/todos/1 \
+  -H "Content-Type: application/json" \
+  -d '{"completed": true}'
+```
+
+### DELETE /todos/{id}
+
+삭제. 성공 시 `204 No Content`, 없으면 `404`.
+
+```bash
+curl -X DELETE http://127.0.0.1:8000/todos/1
+```
+
+## 개발
+
+```bash
+pip install -r requirements-dev.txt
+ruff check .          # 린트
+ruff format .         # 포매팅
+pytest                # 테스트
+```
+
+CI(GitHub Actions)는 Python 3.10/3.11/3.12에서 위 세 가지를 실행합니다.
